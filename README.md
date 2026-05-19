@@ -1,4 +1,4 @@
-# ThustAdri
+# ThustAdri86
 Thust-DockerLabs🇪🇸 
 
 **1.1El primer paso es descargar el archivo trust.zip y lo vamos a descomprimir en la terminal**
