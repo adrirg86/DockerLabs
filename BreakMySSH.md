@@ -28,7 +28,7 @@ ping -c3 172.17.0.2
 
 <img width="937" height="305" alt="image" src="https://github.com/user-attachments/assets/2105b392-60be-409d-a0e5-8a60a8614f7b" />
 
-**5. Ahora entraremos a la ocnsola de metasploit para poder enumerar usuario**
+**5. Ahora entraremos a la consola de metasploit para poder enumerar usuario**
 ```bash
 msfconsole
 ```
