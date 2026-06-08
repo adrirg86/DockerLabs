@@ -1,4 +1,4 @@
-# 🐳🇪🇸🇪🇸🇪🇸 DockerLabs - Adrirg86
+# 🐳🇪🇸 DockerLabs - Adrirg86
 
 ¡Bienvenido/a a mi repositorio de resoluciones de **DockerLabs**! Este proyecto contiene las guías paso a paso (*writeups*) de las máquinas de la plataforma. 
 
