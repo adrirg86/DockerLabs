@@ -1,0 +1,9 @@
+
+### Autoescuela-DockerLabs🇪🇸
+
+#### 1. Primero debemos de descomprimir el archivo y lo moveremos a nuestra zona de trabajo.
+```bash
+unzip autoescuela.zip 
+```
+
+
