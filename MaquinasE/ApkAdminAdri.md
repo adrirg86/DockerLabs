@@ -89,7 +89,27 @@ ssh pingu@172.17.0..2
 <img width="907" height="359" alt="image" src="https://github.com/user-attachments/assets/9648a06a-cf09-43ee-be15-72c857bcfa1f" />
 
 
-#### 6. 
+#### 6. Ahora procedemos a intentar escalar privilegios root, primero miraremos los binarios que podemos manipular desde pingu.
+
+```bash
+sudo -l 
+find / -perm -4000 -type f 2>/dev/null
+```
+
+<img width="859" height="222" alt="image" src="https://github.com/user-attachments/assets/7e5b5ab4-24fe-4a41-ab01-7c9697ab54ec" />
+
+
+#### 7. Viendo que no podemos manipular ningún archivo fuera de lo normal probamos a escalar mediante la misma password de pingu.
+
+```bash
+su
+# passwd: chocolate
+```
+
+<img width="924" height="69" alt="image" src="https://github.com/user-attachments/assets/57696637-6cef-40c2-8730-adcb5f187246" />
+
+
+
 
 
 
