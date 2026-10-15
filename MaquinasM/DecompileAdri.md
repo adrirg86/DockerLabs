@@ -57,7 +57,7 @@ jadx-gui app-release.apk &
 
 *Añadimos a `/etc/hosts` `172.17.0.2 booking.internal` para facilitar las peticiones.*
 
-# CTF_STAGE1 FLAG `FLAG{stage1_buildconfig_leak_BKGVlytS}`
+## CTF_STAGE1 FLAG `FLAG{stage1_buildconfig_leak_BKGVlytS}`
 
 <img width="851" height="491" alt="image" src="https://github.com/user-attachments/assets/10102c8f-3df1-4b51-958b-132c7e3e6005" />
 
@@ -130,7 +130,7 @@ ssh deploy@172.17.0.2
 <img width="813" height="506" alt="image" src="https://github.com/user-attachments/assets/8f9d44c0-2fa2-4f1c-b45c-417842e17446" />
 
 
-# FLAG STAGE2
+## FLAG STAGE2
 
 <img width="430" height="21" alt="image" src="https://github.com/user-attachments/assets/d4a9e5b4-f888-4de8-af53-6fc93aa91684" />
 
@@ -142,7 +142,7 @@ ssh deploy@172.17.0.2
 
 <img width="849" height="190" alt="image" src="https://github.com/user-attachments/assets/8f86a450-b983-4ab6-ac96-61c358269b5d" />
 
-# FLAG STAGE3
+## FLAG STAGE3
 
 <img width="488" height="65" alt="image" src="https://github.com/user-attachments/assets/e52e5f06-1cb6-4109-a137-927134755748" />
 
@@ -158,7 +158,7 @@ ssh deploy@172.17.0.2
 <img width="822" height="85" alt="image" src="https://github.com/user-attachments/assets/24b6bc43-4977-447f-8eca-75a0017f8622" />
 
 
-# ROOT FLAG
+## ROOT FLAG
 
 <img width="615" height="116" alt="image" src="https://github.com/user-attachments/assets/758398ba-7879-4084-8dd9-b4c7308ff795" />
 
